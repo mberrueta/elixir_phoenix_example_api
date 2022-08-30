@@ -7,6 +7,10 @@ defmodule ImdbWeb.Router do
 
   scope "/api", ImdbWeb do
     pipe_through :api
+
+    resources "/directors", DirectorController, except: [:new, :edit]
+    resources "/actors", ActorController, except: [:new, :edit]
+    resources "/movies", MovieController, except: [:new, :edit]
   end
 
   # Enables LiveDashboard only for development
