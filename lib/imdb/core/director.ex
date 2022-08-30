@@ -1,4 +1,6 @@
 defmodule Imdb.Core.Director do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -6,6 +8,8 @@ defmodule Imdb.Core.Director do
   @foreign_key_type :binary_id
   schema "directors" do
     field :full_name, :string
+
+    has_many :movies, Imdb.Core.Movie
 
     timestamps()
   end

@@ -1,4 +1,6 @@
 defmodule Imdb.Core.Movie do
+  @moduledoc false
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -12,6 +14,8 @@ defmodule Imdb.Core.Movie do
     field :popular, :boolean, default: false
     field :rate, :float
     field :directors_fk, :binary_id
+
+    belongs_to :director, Imdb.Core.Director
 
     timestamps()
   end

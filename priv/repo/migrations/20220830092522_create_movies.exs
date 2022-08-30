@@ -10,7 +10,7 @@ defmodule Imdb.Repo.Migrations.CreateMovies do
       add :rate, :float
       add :popular, :boolean, default: false, null: false
       add :labels, {:array, :string}
-      add :directors_fk, references(:directors, on_delete: :nothing, type: :binary_id)
+      add :directors_fk, references(:directors, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end
