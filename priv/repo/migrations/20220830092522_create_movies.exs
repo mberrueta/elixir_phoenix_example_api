@@ -10,12 +10,12 @@ defmodule Imdb.Repo.Migrations.CreateMovies do
       add :rate, :float
       add :popular, :boolean, default: false, null: false
       add :labels, {:array, :string}
-      add :directors_fk, references(:directors, on_delete: :delete_all, type: :binary_id)
+      add :directors_id, references(:directors, on_delete: :delete_all, type: :binary_id)
 
       timestamps()
     end
 
-    create index(:movies, [:directors_fk])
+    create index(:movies, [:directors_id])
     create unique_index(:movies, [:name], name: :movies_unique_ix)
   end
 end

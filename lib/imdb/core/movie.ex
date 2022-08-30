@@ -13,9 +13,9 @@ defmodule Imdb.Core.Movie do
     field :name, :string
     field :popular, :boolean, default: false
     field :rate, :float
-    field :directors_fk, :binary_id
-
-    belongs_to :director, Imdb.Core.Director
+    field :directors_id, :binary_id
+#
+#    belongs_to :director, Imdb.Core.Director
 
     timestamps()
   end
