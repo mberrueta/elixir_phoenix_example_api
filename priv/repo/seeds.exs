@@ -3,6 +3,7 @@
 #     mix run priv/repo/seeds.exs
 
 Imdb.Repo.delete_all Imdb.Core.Director
+Imdb.Repo.delete_all Imdb.Core.Actor
 
 peter_jackson = Imdb.Repo.insert!(%Imdb.Core.Director{
   full_name: "Peter Jackson"
@@ -15,7 +16,7 @@ the_lord_of_the_rings_the_fellowship_of_the_ring = Imdb.Repo.insert!(%Imdb.Core.
   name: "The Lord of the Rings: The Fellowship of the Ring",
   popular: true,
   rate: 0.0,
-  directors_id: peter_jackson.id,
+  director: peter_jackson,
 })
 
 the_lord_of_the_rings_the_two_towers = Imdb.Repo.insert!(%Imdb.Core.Movie{
@@ -25,7 +26,7 @@ the_lord_of_the_rings_the_two_towers = Imdb.Repo.insert!(%Imdb.Core.Movie{
   name: "The Lord of the Rings: The Two Towers",
   popular: true,
   rate: 0.0,
-  directors_id: peter_jackson.id,
+  director: peter_jackson,
 })
 
 the_lord_of_the_rings_the_return_of_the_king = Imdb.Repo.insert!(%Imdb.Core.Movie{
@@ -35,7 +36,7 @@ the_lord_of_the_rings_the_return_of_the_king = Imdb.Repo.insert!(%Imdb.Core.Movi
   name: "The Lord of the Rings: The Return of the King",
   popular: true,
   rate: 0.0,
-  directors_id: peter_jackson.id,
+  director: peter_jackson,
 })
 
 chris_nolan = Imdb.Repo.insert!(%Imdb.Core.Director{
@@ -49,7 +50,7 @@ inception = Imdb.Repo.insert!(%Imdb.Core.Movie{
   name: "Inception",
   popular: true,
   rate: 0.0,
-  directors_id: chris_nolan.id,
+  director: chris_nolan,
 })
 
 david_fincher = Imdb.Repo.insert!(%Imdb.Core.Director{
@@ -63,7 +64,7 @@ fight_club = Imdb.Repo.insert!(%Imdb.Core.Movie{
   name: "Fight club",
   popular: false,
   rate: 0.0,
-  directors_id: david_fincher.id,
+  director: david_fincher,
 })
 
 terry_gilliam = Imdb.Repo.insert!(%Imdb.Core.Director{
@@ -77,7 +78,7 @@ twelve_monkeys = Imdb.Repo.insert!(%Imdb.Core.Movie{
   name: "12 Monkeys",
   popular: false,
   rate: 0.0,
-  directors_id: terry_gilliam.id,
+  director: terry_gilliam,
 })
 
 brad_pitt = Imdb.Repo.insert!(%Imdb.Core.Actor{ full_name: "Brad Pitt" })
@@ -89,3 +90,39 @@ joseph_gordon = Imdb.Repo.insert!(%Imdb.Core.Actor{ full_name: "Joseph Gordon"})
 elijah_wood = Imdb.Repo.insert!(%Imdb.Core.Actor{ full_name: "Elijah Wood"})
 orlando_bloom = Imdb.Repo.insert!(%Imdb.Core.Actor{ full_name: "Orlando Bloom"})
 sean_bean = Imdb.Repo.insert!(%Imdb.Core.Actor{ full_name: "Sean Bean"})
+
+the_lord_of_the_rings_the_fellowship_of_the_ring
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [sean_bean, orlando_bloom, elijah_wood])
+|> Imdb.Repo.update!
+
+the_lord_of_the_rings_the_two_towers
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [sean_bean, orlando_bloom, elijah_wood])
+|> Imdb.Repo.update!
+
+the_lord_of_the_rings_the_return_of_the_king
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [sean_bean, orlando_bloom, elijah_wood])
+|> Imdb.Repo.update!
+
+inception
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [joseph_gordon, elliot_page, leonardo_dicaprio])
+|> Imdb.Repo.update!
+
+fight_club
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [brad_pitt, edward_norton])
+|> Imdb.Repo.update!
+
+twelve_monkeys
+|> Imdb.Repo.preload(:actors)
+|> Ecto.Changeset.change() # build changeset with current actors
+|> Ecto.Changeset.put_assoc(:actors, [brad_pitt, bruce_willies])
+|> Imdb.Repo.update!

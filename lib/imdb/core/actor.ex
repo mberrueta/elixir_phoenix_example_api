@@ -1,6 +1,6 @@
 defmodule Imdb.Core.Actor do
   @moduledoc false
-  
+
   use Ecto.Schema
   import Ecto.Changeset
 
@@ -9,6 +9,7 @@ defmodule Imdb.Core.Actor do
   schema "actors" do
     field :full_name, :string
 
+    many_to_many :movies, Imdb.Core.Movie, join_through: "actors_movies"
     timestamps()
   end
 
