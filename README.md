@@ -44,7 +44,6 @@ erDiagram
     actors_movies {
         uuid movie_id
         uuid actor_id
-        date timestamp
     }
     
     directors ||--o{ movies : "director_id"

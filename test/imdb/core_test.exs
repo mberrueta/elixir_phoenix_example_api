@@ -110,4 +110,68 @@ defmodule Imdb.CoreTest do
       assert %Ecto.Changeset{} = Core.change_actor(actor)
     end
   end
+
+  describe "movies" do
+    alias Imdb.Core.Movie
+
+    import Imdb.CoreFixtures
+
+    @invalid_attrs %{description: nil, labels: nil, likes: nil, name: nil, popular: nil, rate: nil}
+
+    test "list_movies/0 returns all movies" do
+      movie = movie_fixture()
+      assert Core.list_movies() == [movie]
+    end
+
+    test "get_movie!/1 returns the movie with given id" do
+      movie = movie_fixture()
+      assert Core.get_movie!(movie.id) == movie
+    end
+
+    test "create_movie/1 with valid data creates a movie" do
+      valid_attrs = %{description: "some description", labels: [], likes: 42, name: "some name", popular: true, rate: 120.5}
+
+      assert {:ok, %Movie{} = movie} = Core.create_movie(valid_attrs)
+      assert movie.description == "some description"
+      assert movie.labels == []
+      assert movie.likes == 42
+      assert movie.name == "some name"
+      assert movie.popular == true
+      assert movie.rate == 120.5
+    end
+
+    test "create_movie/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Core.create_movie(@invalid_attrs)
+    end
+
+    test "update_movie/2 with valid data updates the movie" do
+      movie = movie_fixture()
+      update_attrs = %{description: "some updated description", labels: [], likes: 43, name: "some updated name", popular: false, rate: 456.7}
+
+      assert {:ok, %Movie{} = movie} = Core.update_movie(movie, update_attrs)
+      assert movie.description == "some updated description"
+      assert movie.labels == []
+      assert movie.likes == 43
+      assert movie.name == "some updated name"
+      assert movie.popular == false
+      assert movie.rate == 456.7
+    end
+
+    test "update_movie/2 with invalid data returns error changeset" do
+      movie = movie_fixture()
+      assert {:error, %Ecto.Changeset{}} = Core.update_movie(movie, @invalid_attrs)
+      assert movie == Core.get_movie!(movie.id)
+    end
+
+    test "delete_movie/1 deletes the movie" do
+      movie = movie_fixture()
+      assert {:ok, %Movie{}} = Core.delete_movie(movie)
+      assert_raise Ecto.NoResultsError, fn -> Core.get_movie!(movie.id) end
+    end
+
+    test "change_movie/1 returns a movie changeset" do
+      movie = movie_fixture()
+      assert %Ecto.Changeset{} = Core.change_movie(movie)
+    end
+  end
 end

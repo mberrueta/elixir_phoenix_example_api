@@ -31,4 +31,23 @@ defmodule Imdb.CoreFixtures do
 
     actor
   end
+
+  @doc """
+  Generate a movie.
+  """
+  def movie_fixture(attrs \\ %{}) do
+    {:ok, movie} =
+      attrs
+      |> Enum.into(%{
+        description: "some description",
+        labels: [],
+        likes: 42,
+        name: "some name",
+        popular: true,
+        rate: 120.5
+      })
+      |> Imdb.Core.create_movie()
+
+    movie
+  end
 end
