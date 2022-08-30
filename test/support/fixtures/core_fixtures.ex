@@ -17,4 +17,18 @@ defmodule Imdb.CoreFixtures do
 
     director
   end
+
+  @doc """
+  Generate a actor.
+  """
+  def actor_fixture(attrs \\ %{}) do
+    {:ok, actor} =
+      attrs
+      |> Enum.into(%{
+        full_name: "some full_name"
+      })
+      |> Imdb.Core.create_actor()
+
+    actor
+  end
 end

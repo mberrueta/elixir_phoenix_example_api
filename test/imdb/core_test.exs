@@ -56,4 +56,58 @@ defmodule Imdb.CoreTest do
       assert %Ecto.Changeset{} = Core.change_director(director)
     end
   end
+
+  describe "actors" do
+    alias Imdb.Core.Actor
+
+    import Imdb.CoreFixtures
+
+    @invalid_attrs %{full_name: nil}
+
+    test "list_actors/0 returns all actors" do
+      actor = actor_fixture()
+      assert Core.list_actors() == [actor]
+    end
+
+    test "get_actor!/1 returns the actor with given id" do
+      actor = actor_fixture()
+      assert Core.get_actor!(actor.id) == actor
+    end
+
+    test "create_actor/1 with valid data creates a actor" do
+      valid_attrs = %{full_name: "some full_name"}
+
+      assert {:ok, %Actor{} = actor} = Core.create_actor(valid_attrs)
+      assert actor.full_name == "some full_name"
+    end
+
+    test "create_actor/1 with invalid data returns error changeset" do
+      assert {:error, %Ecto.Changeset{}} = Core.create_actor(@invalid_attrs)
+    end
+
+    test "update_actor/2 with valid data updates the actor" do
+      actor = actor_fixture()
+      update_attrs = %{full_name: "some updated full_name"}
+
+      assert {:ok, %Actor{} = actor} = Core.update_actor(actor, update_attrs)
+      assert actor.full_name == "some updated full_name"
+    end
+
+    test "update_actor/2 with invalid data returns error changeset" do
+      actor = actor_fixture()
+      assert {:error, %Ecto.Changeset{}} = Core.update_actor(actor, @invalid_attrs)
+      assert actor == Core.get_actor!(actor.id)
+    end
+
+    test "delete_actor/1 deletes the actor" do
+      actor = actor_fixture()
+      assert {:ok, %Actor{}} = Core.delete_actor(actor)
+      assert_raise Ecto.NoResultsError, fn -> Core.get_actor!(actor.id) end
+    end
+
+    test "change_actor/1 returns a actor changeset" do
+      actor = actor_fixture()
+      assert %Ecto.Changeset{} = Core.change_actor(actor)
+    end
+  end
 end
