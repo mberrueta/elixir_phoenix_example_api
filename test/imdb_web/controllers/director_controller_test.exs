@@ -46,7 +46,10 @@ defmodule ImdbWeb.DirectorControllerTest do
   describe "update director" do
     setup [:create_director]
 
-    test "renders director when data is valid", %{conn: conn, director: %Director{id: id} = director} do
+    test "renders director when data is valid", %{
+      conn: conn,
+      director: %Director{id: id} = director
+    } do
       conn = put(conn, Routes.director_path(conn, :update, director), director: @update_attrs)
       assert %{"id" => ^id} = json_response(conn, 200)["data"]
 

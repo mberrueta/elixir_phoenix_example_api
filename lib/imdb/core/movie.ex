@@ -36,9 +36,10 @@ defmodule Imdb.Core.Movie do
     min_likes = get_in(filters, ["min_likes"]) || 0
 
     from m in query,
-    where: ilike(m.name, ^"%#{movie_name}%")
-             and ilike(m.description, ^"%#{movie_desc}%")
-             and m.rate >= ^min_rate
-             and m.likes >= ^min_likes
+      where:
+        ilike(m.name, ^"%#{movie_name}%") and
+          ilike(m.description, ^"%#{movie_desc}%") and
+          m.rate >= ^min_rate and
+          m.likes >= ^min_likes
   end
 end

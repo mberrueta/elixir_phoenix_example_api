@@ -35,113 +35,119 @@ defmodule ImdbWeb.MovieControllerTest do
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 2
-      [ %{ "id" => result_id } | _a] = list
+      [%{"id" => result_id} | _a] = list
       assert result_id === id
     end
   end
 
   describe "index with name filter" do
     test "lists only jedi movies", %{conn: conn} do
-      %Movie{id: id1} = insert(:movie, %{ name: "the best jedi" })
-      %Movie{id: id2} = insert(:movie, %{ name: "the last jedi" })
-      %Movie{id: id3} = insert(:movie, %{ name: "the last jedi returns" })
+      %Movie{id: id1} = insert(:movie, %{name: "the best jedi"})
+      %Movie{id: id2} = insert(:movie, %{name: "the last jedi"})
+      %Movie{id: id3} = insert(:movie, %{name: "the last jedi returns"})
       insert(:movie)
       insert(:movie)
 
-      filters = %{ "filters" => %{ "name" => "jedi" }}
+      filters = %{"filters" => %{"name" => "jedi"}}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 3
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id2
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id3
     end
   end
 
   describe "index with description filter" do
     test "lists only foo movies", %{conn: conn} do
-      %Movie{id: id1} = insert(:movie, %{ name: "bar", description: "foo" })
-      %Movie{id: id2} = insert(:movie, %{ name: "xxx", description: "foo" })
-      insert(:movie, %{ description: "xxx" })
+      %Movie{id: id1} = insert(:movie, %{name: "bar", description: "foo"})
+      %Movie{id: id2} = insert(:movie, %{name: "xxx", description: "foo"})
+      insert(:movie, %{description: "xxx"})
 
-      filters = %{ "filters" => %{ "description" => "foo" }}
+      filters = %{"filters" => %{"description" => "foo"}}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 2
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id2
     end
   end
 
   describe "index with likes filter" do
     test "lists only movies with at least 13 likes", %{conn: conn} do
-      %Movie{id: id1} = insert(:movie, %{ likes: 13 })
-      %Movie{id: id2} = insert(:movie, %{ likes: 20 })
-      insert(:movie, %{ likes: 12 })
-      insert(:movie) # Max is 10
+      %Movie{id: id1} = insert(:movie, %{likes: 13})
+      %Movie{id: id2} = insert(:movie, %{likes: 20})
+      insert(:movie, %{likes: 12})
+      # Max is 10
+      insert(:movie)
       insert(:movie)
 
-      filters = %{ "filters" => %{ "min_likes" => 13 }}
+      filters = %{"filters" => %{"min_likes" => 13}}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 2
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id2
     end
   end
 
   describe "index with rate filter" do
     test "lists only movies with at least 1.2 rating", %{conn: conn} do
-      %Movie{id: id1} = insert(:movie, %{ rate: 1.2 })
-      %Movie{id: id2} = insert(:movie, %{ rate: 1.3 })
-      insert(:movie, %{ rate: 1.1999 })
-      insert(:movie) # Max is 1.0
+      %Movie{id: id1} = insert(:movie, %{rate: 1.2})
+      %Movie{id: id2} = insert(:movie, %{rate: 1.3})
+      insert(:movie, %{rate: 1.1999})
+      # Max is 1.0
+      insert(:movie)
       insert(:movie)
 
-      filters = %{ "filters" => %{ "min_rate" => 1.2 }}
+      filters = %{"filters" => %{"min_rate" => 1.2}}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 2
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id2
     end
   end
 
   describe "index with multiple filter" do
     test "lists only jedy movies with at least 1.2 rating, 13 likes and foo desc", %{conn: conn} do
-      %Movie{ id: id } = insert(:movie, %{
-        name: "the best jedi",
-        description: "foo",
-        likes: 13,
-        rate: 1.2
-      })
+      %Movie{id: id} =
+        insert(:movie, %{
+          name: "the best jedi",
+          description: "foo",
+          likes: 13,
+          rate: 1.2
+        })
+
       insert_list(100, :movie)
 
-      filters = %{ "filters" => %{
-        "name" => "jedi",
-        "description" => "foo",
-        "min_likes" => 13,
-        "min_rate" => 1.2
+      filters = %{
+        "filters" => %{
+          "name" => "jedi",
+          "description" => "foo",
+          "min_likes" => 13,
+          "min_rate" => 1.2
         }
       }
+
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 1
-      [ %{ "id" => result_id } | list] = list
+      [%{"id" => result_id} | list] = list
       assert result_id === id
     end
   end

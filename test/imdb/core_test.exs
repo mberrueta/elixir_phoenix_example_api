@@ -116,7 +116,14 @@ defmodule Imdb.CoreTest do
 
     import Imdb.CoreFixtures
 
-    @invalid_attrs %{description: nil, labels: nil, likes: nil, name: nil, popular: nil, rate: nil}
+    @invalid_attrs %{
+      description: nil,
+      labels: nil,
+      likes: nil,
+      name: nil,
+      popular: nil,
+      rate: nil
+    }
 
     test "list_movies/0 returns all movies" do
       movie = movie_fixture()
@@ -129,7 +136,14 @@ defmodule Imdb.CoreTest do
     end
 
     test "create_movie/1 with valid data creates a movie" do
-      valid_attrs = %{description: "some description", labels: [], likes: 42, name: "some name", popular: true, rate: 120.5}
+      valid_attrs = %{
+        description: "some description",
+        labels: [],
+        likes: 42,
+        name: "some name",
+        popular: true,
+        rate: 120.5
+      }
 
       assert {:ok, %Movie{} = movie} = Core.create_movie(valid_attrs)
       assert movie.description == "some description"
@@ -146,7 +160,15 @@ defmodule Imdb.CoreTest do
 
     test "update_movie/2 with valid data updates the movie" do
       movie = movie_fixture()
-      update_attrs = %{description: "some updated description", labels: [], likes: 43, name: "some updated name", popular: false, rate: 456.7}
+
+      update_attrs = %{
+        description: "some updated description",
+        labels: [],
+        likes: 43,
+        name: "some updated name",
+        popular: false,
+        rate: 456.7
+      }
 
       assert {:ok, %Movie{} = movie} = Core.update_movie(movie, update_attrs)
       assert movie.description == "some updated description"
