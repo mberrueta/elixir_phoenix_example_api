@@ -6,8 +6,8 @@ defmodule ImdbWeb.MovieController do
 
   action_fallback ImdbWeb.FallbackController
 
-  def index(conn, _params) do
-    movies = Core.list_movies()
+  def index(conn, params) do
+    movies = Core.list_movies(params)
     render(conn, "index.json", movies: movies)
   end
 
