@@ -57,7 +57,7 @@ defmodule ImdbWeb.MovieControllerTest do
       assert result_id === id1
       [%{"id" => result_id} | list] = list
       assert result_id === id2
-      [%{"id" => result_id} | list] = list
+      [%{"id" => result_id} | _tail] = list
       assert result_id === id3
     end
   end
@@ -75,7 +75,7 @@ defmodule ImdbWeb.MovieControllerTest do
       assert length(list) == 2
       [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [%{"id" => result_id} | list] = list
+      [%{"id" => result_id} | _tail] = list
       assert result_id === id2
     end
   end
@@ -96,7 +96,7 @@ defmodule ImdbWeb.MovieControllerTest do
       assert length(list) == 2
       [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [%{"id" => result_id} | list] = list
+      [%{"id" => result_id} | _tail] = list
       assert result_id === id2
     end
   end
@@ -117,7 +117,7 @@ defmodule ImdbWeb.MovieControllerTest do
       assert length(list) == 2
       [%{"id" => result_id} | list] = list
       assert result_id === id1
-      [%{"id" => result_id} | list] = list
+      [%{"id" => result_id} | _tail] = list
       assert result_id === id2
     end
   end
@@ -147,7 +147,7 @@ defmodule ImdbWeb.MovieControllerTest do
       list = json_response(conn, 200)["data"]
 
       assert length(list) == 1
-      [%{"id" => result_id} | list] = list
+      [%{"id" => result_id} | _tail] = list
       assert result_id === id
     end
   end
