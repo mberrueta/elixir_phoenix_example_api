@@ -58,12 +58,10 @@ open http://localhost:4000/api/movies
 mix phx.routes | grep '/api' | awk '{print $2 " " $3}' | sed '/.*Controller/d'
 
 # seed some data
-mix run priv/repo/seeds.exs                      
+mix run priv/repo/seeds.exs
 
 # Example filtering movies
 curl http://localhost:4000/api/movies | jq . # all
 curl http://localhost:4000/api/movies?name=monkeys | jq .
-curl http://localhost:4000/api/movies\?description=first&min_likes=0&min_rate=0 | jq .                                                              
- 
+curl http://localhost:4000/api/movies\?description=first&min_likes=0&min_rate=0 | jq .
 ```
-
