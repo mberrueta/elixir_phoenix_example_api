@@ -209,9 +209,7 @@ defmodule Imdb.Core do
       [%Movie{}, ...]
 
   """
-  def list_movies(params \\ %{"filters" => nil}) do
-    filters = get_in(params, ["filters"])
-
+  def list_movies(filters \\ %{}) do
     Movie
     |> Movie.search(filters)
     |> Repo.all()

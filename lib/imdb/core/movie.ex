@@ -29,7 +29,7 @@ defmodule Imdb.Core.Movie do
     |> validate_required([:name, :description, :likes, :rate, :popular, :labels])
   end
 
-  def search(query, filters) do
+  def search(query, filters \\ %{}) do
     movie_name = get_in(filters, ["name"])
     movie_desc = get_in(filters, ["description"])
     min_rate = get_in(filters, ["min_rate"]) || 0.0

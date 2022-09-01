@@ -28,7 +28,7 @@ defmodule Imdb.MixProject do
   def application do
     [
       mod: {Imdb.Application, []},
-      extra_applications: [:logger, :runtime_tools, :ex_machina]
+      extra_applications: [:logger, :runtime_tools]
     ]
   end
 

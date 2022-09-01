@@ -1,22 +1,6 @@
 # Imdb
 
-To start your Phoenix server:
-
-  * Install dependencies with `mix deps.get`
-  * Create and migrate your database with `mix ecto.setup`
-  * Start Phoenix endpoint with `mix phx.server` or inside IEx with `iex -S mix phx.server`
-
-Now you can visit [`localhost:4000`](http://localhost:4000) from your browser.
-
-Ready to run in production? Please [check our deployment guides](https://hexdocs.pm/phoenix/deployment.html).
-
-## Learn more
-
-  * Official website: https://www.phoenixframework.org/
-  * Guides: https://hexdocs.pm/phoenix/overview.html
-  * Docs: https://hexdocs.pm/phoenix
-  * Forum: https://elixirforum.com/c/phoenix-forum
-  * Source: https://github.com/phoenixframework/phoenix
+Simple API to test relationships, tests and some libraries
 
 ## Model
 
@@ -50,3 +34,36 @@ erDiagram
     movies ||--o{ actors_movies : "movies_id"
     actors ||--o{ actors_movies : "actors_id"
 ```
+
+## Cleaning code
+
+```shell
+mix setup
+mix test
+
+mix format # format code
+mix credo # like rubocop
+mix coverall.html # code coverage
+mix deps.audit # libraries vulnerabilities check
+mix sobelow # security static code check
+
+mix phx.server
+open http://localhost:4000/api/movies
+```
+
+## Routes
+
+```shell
+# simplified routes
+mix phx.routes | grep '/api' | awk '{print $2 " " $3}' | sed '/.*Controller/d'
+
+# seed some data
+mix run priv/repo/seeds.exs                      
+
+# Example filtering movies
+curl http://localhost:4000/api/movies | jq . # all
+curl http://localhost:4000/api/movies?name=monkeys | jq .
+curl http://localhost:4000/api/movies\?description=first&min_likes=0&min_rate=0 | jq .                                                              
+ 
+```
+

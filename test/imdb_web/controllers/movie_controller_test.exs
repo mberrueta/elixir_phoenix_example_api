@@ -48,7 +48,7 @@ defmodule ImdbWeb.MovieControllerTest do
       insert(:movie)
       insert(:movie)
 
-      filters = %{"filters" => %{"name" => "jedi"}}
+      filters = %{"name" => "jedi"}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
@@ -68,7 +68,7 @@ defmodule ImdbWeb.MovieControllerTest do
       %Movie{id: id2} = insert(:movie, %{name: "xxx", description: "foo"})
       insert(:movie, %{description: "xxx"})
 
-      filters = %{"filters" => %{"description" => "foo"}}
+      filters = %{"description" => "foo"}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
@@ -89,7 +89,7 @@ defmodule ImdbWeb.MovieControllerTest do
       insert(:movie)
       insert(:movie)
 
-      filters = %{"filters" => %{"min_likes" => 13}}
+      filters = %{"min_likes" => 13}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
@@ -110,7 +110,7 @@ defmodule ImdbWeb.MovieControllerTest do
       insert(:movie)
       insert(:movie)
 
-      filters = %{"filters" => %{"min_rate" => 1.2}}
+      filters = %{"min_rate" => 1.2}
       conn = get(conn, Routes.movie_path(conn, :index, filters))
       list = json_response(conn, 200)["data"]
 
@@ -135,12 +135,10 @@ defmodule ImdbWeb.MovieControllerTest do
       insert_list(100, :movie)
 
       filters = %{
-        "filters" => %{
-          "name" => "jedi",
-          "description" => "foo",
-          "min_likes" => 13,
-          "min_rate" => 1.2
-        }
+        "name" => "jedi",
+        "description" => "foo",
+        "min_likes" => 13,
+        "min_rate" => 1.2
       }
 
       conn = get(conn, Routes.movie_path(conn, :index, filters))
