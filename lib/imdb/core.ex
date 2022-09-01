@@ -209,7 +209,7 @@ defmodule Imdb.Core do
       [%Movie{}, ...]
 
   """
-  def list_movies(params \\ %{ "filters" => nil}) do
+  def list_movies(params \\ %{"filters" => nil}) do
     filters = get_in(params, ["filters"])
 
     Movie

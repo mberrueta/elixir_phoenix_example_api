@@ -57,7 +57,9 @@ defmodule Imdb.MixProject do
       {:excoveralls, "~> 0.14.6"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.7.0", only: :test},
-      {:faker, "~> 0.17", only: :test}
+      {:faker, "~> 0.17", only: :test},
+      {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
+      {:sobelow, "~> 0.8", only: :dev}
     ]
   end
 

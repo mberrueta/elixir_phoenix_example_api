@@ -1,4 +1,6 @@
 defmodule Imdb.Test.Factories do
+  @moduledoc false
+
   use ExMachina.Ecto, repo: Imdb.Repo
 
   def movie_factory do
