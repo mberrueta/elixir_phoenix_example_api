@@ -221,9 +221,9 @@ defmodule Imdb.Core do
       [%Movie{}, ...]
 
   """
-  def list_movies(filters \\ %{}) do
+  def list_movies(filters \\ %{}, preload_options \\ []) do
     Movie
-    |> Movie.search(filters)
+    |> Movie.search(filters, preload_options)
     |> Repo.all()
   end
 

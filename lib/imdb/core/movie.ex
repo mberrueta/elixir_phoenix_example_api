@@ -25,11 +25,11 @@ defmodule Imdb.Core.Movie do
 
   def changeset(movie, attrs) do
     movie
-    |> cast(attrs, [:name, :description, :likes, :rate, :popular, :labels])
+    |> cast(attrs, [:name, :description, :likes, :rate, :popular, :labels, :director_id])
     |> validate_required([:name, :description, :likes, :rate, :popular, :labels])
   end
 
-  def search(query, filters \\ %{}) do
+  def search(query, filters \\ %{}, preload_options \\ []) do
     movie_name = get_in(filters, ["name"])
     movie_desc = get_in(filters, ["description"])
     min_rate = get_in(filters, ["min_rate"]) || 0.0
@@ -40,6 +40,7 @@ defmodule Imdb.Core.Movie do
         ilike(m.name, ^"%#{movie_name}%") and
           ilike(m.description, ^"%#{movie_desc}%") and
           m.rate >= ^min_rate and
-          m.likes >= ^min_likes
+          m.likes >= ^min_likes,
+      preload: ^preload_options
   end
 end

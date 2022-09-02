@@ -23,29 +23,30 @@ defmodule MovieImporter.ImdbImporter do
   def import(), do: {:error, "movie_name is required"}
 
   def import(movie_name) do
-    IO.inspect(movie_name)
+    #    IO.inspect(movie_name)
 
     case seek_response = movie_name |> ImdbClient.seek() do
-      {:ok, %{"results" => nil, "errorMessage" => error}} -> IO.inspect(error)
-      {:ok, %{"results" => results}} -> seek_response |> Enum.each(fn movie -> store(movie) end)
-      _ -> IO.inspect(seek_response)
+      {:ok, %{"results" => nil, "errorMessage" => error}} -> error
+      {:ok, list} ->
+        {
+          :ok,
+          list |> Enum.map(fn movie -> store(movie) end)
+        }
+      _ -> seek_response
     end
   end
 
-  defp store(title, description, nil, stars, genres, rating, votes),
-    do: {:error, "director is required"}
-
   defp store(%{
-         "title" => title,
-         "description" => description,
-         "directors_names" => directors_names,
-         "actors_names" => actors_names,
-         "labels" => labels,
-         "rating" => rating,
-         "votes" => votes
+         actors_names: actors_names,
+         description: description,
+         directors_names: directors_names,
+         labels: labels,
+         rating: rating,
+         title: title,
+         votes: votes
        }) do
     [director_name | _] = directors_names
-    director_id = get_or_create_director(director_name)
+    director = get_or_create_director(director_name)
 
     {:ok, movie} =
       Imdb.Core.create_movie(%{
@@ -55,42 +56,48 @@ defmodule MovieImporter.ImdbImporter do
         name: title,
         popular: rating >= 9.0,
         rate: rating,
-        director_id: director_id
+        director_id: director.id
       })
 
     actors_list =
       actors_names
       |> Enum.map(fn actor_name -> get_or_create_actor(actor_name) end)
+      # ignore errors
+      |> Enum.reject(&is_nil(&1))
 
-    IO.inspect(actors_list)
-    IO.inspect(movie)
+    movie
+    |> Imdb.Repo.preload(:actors)
+    |> Ecto.Changeset.change()
+    |> Ecto.Changeset.put_assoc(:actors, actors_list)
+    |> Imdb.Repo.update!()
 
-    #    not working
-    #    ** (Postgrex.Error) ERROR 23503 (foreign_key_violation) insert or update on table "actors_movies" violates foreign key constraint "actors_movies_movie_id_fkey"
-    #
-    #                                                                                                                       table: actors_movies
-    #                                                            constraint: actors_movies_movie_id_fkey
-    #
-    #                                                            Key (movie_id)=(11e0275f-0761-4e88-b599-5091279cdcf4) is not present in table "movies".
-    #    movie
-    #    |> Imdb.Repo.preload(:actors)
-    #    |> Ecto.Changeset.change()
-    #    |> Ecto.Changeset.put_assoc(:actors, actors_list)
-    #    |> Imdb.Repo.update!()
+    movie.id
   end
 
-  # TODO: move to repo
+  # TODO: move to repo !!
   defp get_or_create_director(director_name) do
     case result = Imdb.Core.get_director_by_name(director_name) do
-      %Imdb.Core.Director{:id => director_id} = director -> director_id
-      _ -> Imdb.Core.create_director(%{"full_name" => director_name})
+      %Imdb.Core.Director{} ->
+        result
+
+      _ ->
+        case insert = Imdb.Core.create_director(%{"full_name" => director_name}) do
+          {:ok, director} -> director
+          _ -> IO.inspect(insert)
+        end
     end
   end
 
   defp get_or_create_actor(actor_name) do
     case result = Imdb.Core.get_actor_by_name(actor_name) do
-      %Imdb.Core.Actor{} -> result
-      _ -> Imdb.Core.create_actor(%{"full_name" => actor_name})
+      %Imdb.Core.Actor{} ->
+        result
+
+      _ ->
+        case Imdb.Core.create_actor(%{"full_name" => actor_name}) do
+          {:ok, actor} -> actor
+          _ -> nil
+        end
     end
   end
 end

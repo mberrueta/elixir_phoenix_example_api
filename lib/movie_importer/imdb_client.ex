@@ -33,8 +33,8 @@ defmodule MovieImporter.ImdbClient do
         {:error, error}
 
       {:ok, %{"results" => results}} ->
-        IO.puts("seek movie -->")
-        IO.inspect(results)
+        #        IO.puts("seek movie -->")
+        #        IO.inspect(results)
 
         {
           :ok,
@@ -91,7 +91,7 @@ defmodule MovieImporter.ImdbClient do
         }
 
       _ ->
-        IO.inspect(movie_response)
+        #        IO.inspect(movie_response)
         movie_response
     end
   end

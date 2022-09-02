@@ -1,27 +1,27 @@
-defmodule MovieImporter.ImdbClientTest do
+defmodule MovieImporter.ImdbImporterTest do
   use Imdb.DataCase
 
-  alias MovieImporter.{ImdbClient, HttpClient}
+  alias MovieImporter.{ImdbImporter, HttpClient}
 
   import Mock
 
-  describe "#seek(movie_name)" do
+  describe "#import(movie_name)" do
     @describetag :importer
 
     test "fail without name" do
-      assert {:error, "movie_name is required"} = ImdbClient.seek()
+      assert {:error, "movie_name is required"} = ImdbImporter.import()
     end
 
     test "without results" do
       with_mock HttpClient, get_http: fn _ -> {:ok, %{"results" => []}} end do
-        assert {:ok, []} = ImdbClient.seek("something")
+        assert {:ok, []} = ImdbImporter.import("something")
       end
     end
 
     test "with api error" do
       with_mock HttpClient,
         get_http: fn _ -> {:ok, %{"results" => nil, "errorMessage" => "boom"}} end do
-        assert {:error, "boom"} = ImdbClient.seek("something")
+        assert {:error, "boom"} = ImdbImporter.import("something")
       end
     end
 
@@ -56,29 +56,18 @@ defmodule MovieImporter.ImdbClientTest do
             url |> String.contains?("ID-b2") -> {:ok, movie2}
           end
         end do
-        assert {
-                 :ok,
-                 [
-                   %{
-                     actors_names: ["some guy", "another one"],
-                     description: "wow is cool",
-                     directors_names: ["some director"],
-                     labels: ["a", "b"],
-                     rating: 0.23,
-                     title: "The somethings",
-                     votes: 2
-                   },
-                   %{
-                     actors_names: ["some guy", "another two"],
-                     description: "wow is more cool than 1",
-                     directors_names: ["some director"],
-                     labels: ["a"],
-                     rating: 0.13,
-                     title: "The somethings are back",
-                     votes: 1
-                   }
-                 ]
-               } = ImdbClient.seek("something")
+        assert {:ok, list} = ImdbImporter.import("something")
+        assert length(list) == 2
+
+        [m1, m2] = Imdb.Core.list_movies(%{"name" => "something"}, [:director, :actors])
+
+        assert m1.director.full_name == "some director"
+        actor_names = m1.actors |> Enum.map(& &1.full_name)
+        assert actor_names == ["some guy", "another one"]
+
+        assert m2.director.full_name == "some director"
+        actor_names = m2.actors |> Enum.map(& &1.full_name)
+        assert actor_names == ["some guy", "another two"]
       end
     end
   end

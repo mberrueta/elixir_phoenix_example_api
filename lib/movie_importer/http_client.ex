@@ -25,7 +25,7 @@ defmodule MovieImporter.HttpClient do
   def get_http(), do: {:error, "url is required"}
 
   def get_http(url) do
-    IO.inspect(url)
+    #    IO.inspect(url)
 
     :get
     |> Finch.build(url)
