@@ -37,6 +37,12 @@ defmodule Imdb.Core do
   """
   def get_director!(id), do: Repo.get!(Director, id)
 
+  def get_director_by_name(name) do
+    Director
+    |> Director.search(name)
+    |> Repo.one()
+  end
+
   @doc """
   Creates a director.
 
@@ -52,7 +58,7 @@ defmodule Imdb.Core do
   def create_director(attrs \\ %{}) do
     %Director{}
     |> Director.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @doc """
@@ -133,6 +139,12 @@ defmodule Imdb.Core do
   """
   def get_actor!(id), do: Repo.get!(Actor, id)
 
+  def get_actor_by_name(name) do
+    Actor
+    |> Actor.search(name)
+    |> Repo.one()
+  end
+
   @doc """
   Creates a actor.
 
@@ -148,7 +160,7 @@ defmodule Imdb.Core do
   def create_actor(attrs \\ %{}) do
     %Actor{}
     |> Actor.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @doc """
@@ -246,7 +258,7 @@ defmodule Imdb.Core do
   def create_movie(attrs \\ %{}) do
     %Movie{}
     |> Movie.changeset(attrs)
-    |> Repo.insert()
+    |> Repo.insert(on_conflict: :nothing)
   end
 
   @doc """

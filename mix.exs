@@ -53,13 +53,15 @@ defmodule Imdb.MixProject do
       {:gettext, "~> 0.18"},
       {:jason, "~> 1.2"},
       {:plug_cowboy, "~> 2.5"},
+      {:finch, "~> 0.13"},
+      {:sobelow, "~> 0.8", only: :dev},
+      {:excoveralls, "~> 0.14.6", only: :dev},
+      {:ex_doc, "~> 0.27", only: :dev, runtime: false},
       {:credo, "~> 1.6", only: [:dev, :test], runtime: false},
-      {:excoveralls, "~> 0.14.6"},
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
-      {:ex_machina, "~> 2.7.0", only: :test},
-      {:faker, "~> 0.17", only: :test},
       {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
-      {:sobelow, "~> 0.8", only: :dev}
+      {:ex_machina, "~> 2.7.0", only: :test},
+      {:faker, "~> 0.17", only: :test}
     ]
   end
 

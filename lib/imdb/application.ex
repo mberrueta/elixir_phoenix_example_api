@@ -15,7 +15,8 @@ defmodule Imdb.Application do
       # Start the PubSub system
       {Phoenix.PubSub, name: Imdb.PubSub},
       # Start the Endpoint (http/https)
-      ImdbWeb.Endpoint
+      ImdbWeb.Endpoint,
+      {Finch, name: MyConfiguredFinch}
       # Start a worker by calling: Imdb.Worker.start_link(arg)
       # {Imdb.Worker, arg}
     ]
