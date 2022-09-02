@@ -61,6 +61,8 @@ defmodule Imdb.MixProject do
       {:mix_test_watch, "~> 1.0", only: [:dev, :test], runtime: false},
       {:mix_audit, "~> 2.0", only: [:dev, :test], runtime: false},
       {:ex_machina, "~> 2.7.0", only: :test},
+      {:mock, "~> 0.3.0", only: :test},
+      {:bypass, "~> 2.1", only: :test},
       {:faker, "~> 0.17", only: :test}
     ]
   end
