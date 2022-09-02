@@ -33,8 +33,13 @@ defmodule MovieImporter.ImdbClient do
         {:error, error}
 
       {:ok, %{"results" => results}} ->
-        results
-        |> get_movies()
+        IO.puts("seek movie -->")
+        IO.inspect(results)
+
+        {
+          :ok,
+          results |> get_movies()
+        }
 
       _ ->
         search_response
@@ -71,8 +76,7 @@ defmodule MovieImporter.ImdbClient do
          "genres" => genres,
          "imDbRating" => rating,
          "imDbRatingVotes" => votes
-       }
-      } ->
+       }} ->
         {
           :ok,
           %{
