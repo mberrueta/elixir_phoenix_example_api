@@ -70,7 +70,16 @@ curl http://localhost:4000/api/movies\?description=first&min_likes=0&min_rate=0 
 
 ## Import
 
+It require to set an `IMDB_API_KEY` env var with. You can get one for free at `https://imdb-api.com/`
+
 ```shell
+
+echo "
+IMDB_API_KEY=xxxx
+" >> .env
+export $(cat ./.env | sed 's/#.*//g' | xargs ) # nice trick 😀
+
+
 iex -S mix
 
 MovieImporter.ImdbImporter.import("Silence")
