@@ -73,7 +73,8 @@ curl http://localhost:4000/api/movies\?description=first&min_likes=0&min_rate=0 
 ```shell
 iex -S mix
 
-MovieImporter.ImdbImporter.import("The Silence of the Lambs")
+MovieImporter.ImdbImporter.import("Silence")
 
-(from m in Actor, preload: [:movies]) |> Imdb.Repo.all()
+(from a in Actor, preload: [:movies]) |> Imdb.Repo.all()
+(from m in Movie, preload: [:actors, :director]) |> Imdb.Repo.all()
 ```
