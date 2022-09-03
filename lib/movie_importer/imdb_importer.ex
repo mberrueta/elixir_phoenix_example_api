@@ -26,13 +26,17 @@ defmodule MovieImporter.ImdbImporter do
     #    IO.inspect(movie_name)
 
     case seek_response = movie_name |> ImdbClient.seek() do
-      {:ok, %{"results" => nil, "errorMessage" => error}} -> error
+      {:ok, %{"results" => nil, "errorMessage" => error}} ->
+        error
+
       {:ok, list} ->
         {
           :ok,
           list |> Enum.map(fn movie -> store(movie) end)
         }
-      _ -> seek_response
+
+      _ ->
+        seek_response
     end
   end
 
@@ -83,7 +87,7 @@ defmodule MovieImporter.ImdbImporter do
       _ ->
         case insert = Imdb.Core.create_director(%{"full_name" => director_name}) do
           {:ok, director} -> director
-          _ -> IO.inspect(insert)
+          _ -> insert
         end
     end
   end
