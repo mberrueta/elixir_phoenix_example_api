@@ -10,9 +10,6 @@ defmodule Imdb.Repo.Migrations.AddActorsMoviesTable do
         primary_key: true
     end
 
-    create index(:actors_movies, [:actor_id])
-    create index(:actors_movies, [:movie_id])
-
     create unique_index(:actors_movies, [:actor_id, :movie_id], name: :actors_movies_unique_ix)
   end
 end

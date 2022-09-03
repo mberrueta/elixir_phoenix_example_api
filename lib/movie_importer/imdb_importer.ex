@@ -10,11 +10,11 @@ defmodule MovieImporter.ImdbImporter do
 
   ## Examples
 
-  iex> MovieImporter.ImdbClient.import("inception")
-  # {:ok, 3}
+  iex> MovieImporter.ImdbImporter.import("inception")
+  # {:ok, ["9ce0a344-8f94-4a8a-92f5-958b51ce3a7c", "4f297c17-9074-4ca8-927f-c31308b055c4"]}
 
   ## Results
-    - {:ok, n} n: number of imported movies
+    - {:ok, movies_id}
     - {:error, reason}
 
   ## Parameters
@@ -68,6 +68,10 @@ defmodule MovieImporter.ImdbImporter do
       |> Enum.map(fn actor_name -> get_or_create_actor(actor_name) end)
       # ignore errors
       |> Enum.reject(&is_nil(&1))
+
+    IO.inspect(movie)
+    IO.inspect(director)
+    IO.inspect(actors_list)
 
     movie
     |> Imdb.Repo.preload(:actors)
